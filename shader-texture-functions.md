@@ -471,17 +471,17 @@ blended together as in normal texture filtering and the resulting value between
 
 ### Read - 2D Multisampled Texture
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `Tv read(uint2 coord, uint sample)`               | `MTLRenderPassDescriptor.setSamplePositions` can specify sample positions
+| Target  | Function                                                                                                                                   | Comments
+|---------|--------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Tv Texture2DMS.Load(int3 coord, int sample[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-load) |
+| MSL     | `Tv read(uint2 coord, uint sample)`                                                                                                        | `MTLRenderPassDescriptor.setSamplePositions` can specify sample positions
 | SPIR-V  |
 
 ### Read - 2D Depth Texture
 
 | Target  | Function                                      | Comments
 |---------|-----------------------------------------------|----------------------------------------|
-| HLSL    |                                               |
+| HLSL    | [`T Texture2D.Load(int3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-load) |
 | MSL     | `T read(uint2 coord, uint lod = 0)`           |
 | SPIR-V  |
 
@@ -489,15 +489,15 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                        | Comments
 |---------|-------------------------------------------------|----------------------------------------|
-| HLSL    |                                                 |
+| HLSL    | [`T Texture2DArray.Load(int4 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-load) |
 | MSL     | `T read(uint2 coord, uint array, uint lod = 0)` |
 | SPIR-V  |
 
 ### Read - 2D Multisampled Depth Texture
 
-| Target  | Function                           | Comments
-|---------|------------------------------------|----------------------------------------|
-| HLSL    |                                    |
+| Target  | Function                                                                                                                                  | Comments
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`T Texture2DMS.Load(int3 coord, int sample[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-load) |
 | MSL     | `T read(uint2 coord, uint sample)` |
 | SPIR-V  |
 
@@ -505,7 +505,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                       | Comments
 |---------|------------------------------------------------|----------------------------------------|
-| HLSL    |                                                |
+| HLSL    | \<not-supported\>
 | MSL     | `T read(uint2 coord, uint face, uint lod = 0)` |
 | SPIR-V  |
 
@@ -513,17 +513,26 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                                   | Comments
 |---------|------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                            |
+| HLSL    | \<not-supported\>
 | MSL     | `T read(uint2 coord, uint face, uint array, uint lod = 0)` |
 | SPIR-V  |
 
 ## Write
 
+HLSL texture writes require using `RWTexture`s - [note they do not support the same methods as regular `Texture`s](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-rwtexture1d):
+> A `RWTexture1D` object cannot use methods from a `Texture1D` object, such as Sample.
+However, because you can create multiple view types to the same resource, you
+can declare multiple texture types as a single texture in multiple shaders.
+For example, you can declare and use a RWTexture1D object as tex in a compute
+shader and then declare and use a Texture1D object as tex in a pixel shader.
+
+`RWTexture`s do not support mip maps.
+
 ### Write - 1D Texture
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`RWTexture1D.operator[int] = color`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-rwtexture1d-operatorindex) |
 | MSL     | `void write(Tv color, uint coord, uint lod = 0)`  | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
 | SPIR-V  |
 
@@ -531,7 +540,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`RWTexture1DArray.operator[int2] = color`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-rwtexture1darray-operatorindex) |
 | MSL     | `void write(Tv color, uint coord, uint lod = 0)`  | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
 | SPIR-V  |
 
@@ -539,7 +548,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`RWTexture2D.operator[int2] = color`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-rwtexture2d) |
 | MSL     | `void write(Tv color, uint2 coord, uint lod = 0)` | `lod` **must** be `0` on macOS.
 | SPIR-V  |
 
@@ -547,7 +556,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                                      | Comments
 |---------|---------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                               |
+| HLSL    | [`RWTexture2DArray.operator[int3] = color`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-rwtexture2darray) |
 | MSL     | `void write(Tv color, uint2 coord, uint array, uint lod = 0)` | `lod` **must** be `0` on macOS.
 | SPIR-V  |
 
@@ -555,7 +564,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`RWTexture3D.operator[int3] = color`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-rwtexture3d-operatorindex) |
 | MSL     | `void write(Tv color, uint3 coord, uint lod = 0)` | `lod` **must** be `0` on macOS.
 | SPIR-V  |
 
@@ -563,7 +572,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                                     | Comments
 |---------|--------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                              |
+| HLSL    | \<not-supported\>
 | MSL     | `void write(Tv color, uint2 coord, uint face, uint lod = 0)` | `lod` **must** be `0` on macOS.<br>`face: [0: +X, 1: -X, 2: +Y, 3: -Y, 4: +Z, 5: -Z]`
 | SPIR-V  |
 
@@ -571,7 +580,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                                                 | Comments
 |---------|--------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                          |
+| HLSL    | \<not-supported\>
 | MSL     | `void write(Tv color, uint2 coord, uint face, uint array, uint lod = 0)` | `lod` **must** be `0` on macOS.<br>`face: [0: +X, 1: -X, 2: +Y, 3: -Y, 4: +Z, 5: -Z]`
 | SPIR-V  |
 
@@ -583,7 +592,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                                                                | Comments
 |---------|-----------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                                         |
+| HLSL    | [`Texture2D.Gather[Red,Green,Blue,Alpha](sampler s, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-gatherred) |
 | MSL     | `Tv gather(sampler s, float2 coord[, int2 offset], component c = component::x)` |
 | SPIR-V  |
 
@@ -591,7 +600,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                                                                | Comments
 |---------|-----------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                                         |
+| HLSL    | [`Texture2DArray.Gather[Red,Green,Blue,Alpha](sampler s, float3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-gatherred) |
 | MSL     | `Tv gather(sampler s, float2 coord, uint array[, int2 offset], component c = component::x)` |
 | SPIR-V  |
 
@@ -599,7 +608,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                                         | Comments
 |---------|------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                  |
+| HLSL    | [`TextureCube.Gather[Red,Green,Blue,Alpha](sampler s, float3 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-gatherred) |
 | MSL     | `Tv gather(sampler s, float3 coord, component c = component::x)` |
 | SPIR-V  |
 
@@ -607,7 +616,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                                                     | Comments
 |---------|------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                              |
+| HLSL    | [`TextureCubeArray.Gather[Red,Green,Blue,Alpha](sampler s, float4 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-gatherred) |
 | MSL     | `Tv gather(sampler s, float3 coord, uint array, component c = component::x)` |
 | SPIR-V  |
 
@@ -615,7 +624,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                                    | Comments
 |---------|-------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                             |
+| HLSL    | [`Texture2D.Gather(sampler s, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-gather) |
 | MSL     | `Tv gather(sampler s, float2 coord[, int2 offset])` |
 | SPIR-V  |
 
@@ -623,7 +632,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                                                | Comments
 |---------|-------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                         |
+| HLSL    | [`Texture2DArray.Gather(sampler s, float3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-gather) |
 | MSL     | `Tv gather(sampler s, float2 coord, uint array[, int2 offset])` |
 | SPIR-V  |
 
@@ -631,7 +640,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                             | Comments
 |---------|--------------------------------------|----------------------------------------|
-| HLSL    |                                      |
+| HLSL    | [`TextureCube.Gather(sampler s, float3 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-gather) |
 | MSL     | `Tv gather(sampler s, float3 coord)` |
 | SPIR-V  |
 
@@ -641,7 +650,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                                                                 | Comments
 |---------|------------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                                          |
+| HLSL    | [`Texture2D.GatherCmp(sampler s, float2 coord, float compare_value[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-gathercmp) |
 | MSL     | `Tv gather_compare(sampler s, float2 coord, float compare_value[, int2 offset])` |
 | SPIR-V  |
 
@@ -649,7 +658,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                                                                             | Comments
 |---------|------------------------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                                                      |
+| HLSL    | [`Texture2DArray.GatherCmp(sampler s, float3 coord, float compare_value[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-gathercmp) |
 | MSL     | `Tv gather_compare(sampler s, float2 coord, uint array, float compare_value[, int2 offset])` |
 | SPIR-V  |
 
@@ -657,16 +666,16 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                                          | Comments
 |---------|-------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                   |
+| HLSL    | [`TextureCube.GatherCmp(sampler s, float3 coord, float compare_value)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-gathercmp) |
 | MSL     | `Tv gather_compare(sampler s, float3 coord, float compare_value)` |
 | SPIR-V  |
 
 ### Gather Compare - Cube Depth Texture Array
 
-| Target  | Function                                                                      | Comments
-|---------|-------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                               |
-| MSL     | `Tv gather_compare(sampler s, float3 coord, uint array, float compare_value)` |
+| Target  | Function                                                                                                                                                        | Comments
+|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`TextureCubeArray.GatherCmp(sampler s, float4 coord, float compare_value)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-gathercmp) |
+| MSL     | `Tv gather_compare(sampler s, float3 coord, uint array, float compare_value)`                                                                                   |
 | SPIR-V  |
 
 ## Query
@@ -675,104 +684,104 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 #### Query - 1D Texture - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
+| Target  | Function                                                                                                                                                                    | Comments
+|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture1D.GetDimensions(in uint mip, out uint width, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture1d-getdimensions) |
+| MSL     | `uint get_width(uint lod = 0)`                                                                                                                                              | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
 | SPIR-V  |
 
 #### Query - 1D Texture - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       | Mipmaps are not supported for 1D textures<br>Always returns `0`.
+| Target  | Function                                                                                                                                                                    | Comments
+|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture1D.GetDimensions(in uint mip, out uint width, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture1d-getdimensions) |
+| MSL     | `uint get_num_mip_levels()`                                                                                                                                                 | Mipmaps are not supported for 1D textures<br>Always returns `0`.
 | SPIR-V  |
 
 ### Query - 1D Texture Array
 
 #### Query - 1D Texture Array - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
+| Target  | Function                                                                                                                                                                                                 | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture1DArray.GetDimensions(in uint mip, out uint width, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture1darray-getdimensions) |
+| MSL     | `uint get_width(uint lod = 0)`                                                                                                                                                                           | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
 | SPIR-V  |
 
 #### Query - 1D Texture Array - Number of array elements
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| Target  | Function                                                                                                                                                                                                 | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture1DArray.GetDimensions(in uint mip, out uint width, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture1darray-getdimensions) |
 | MSL     | `uint get_array_size()`
 | SPIR-V  |
 
 #### Query - 1D Texture Array - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       | Mipmaps are not supported for 1D textures<br>Always returns `0`.
+| Target  | Function                                                                                                                                                                                                 | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture1DArray.GetDimensions(in uint mip, out uint width, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture1darray-getdimensions) |
+| MSL     | `uint get_num_mip_levels()`                                                                                                                                                                              | Mipmaps are not supported for 1D textures<br>Always returns `0`.
 | SPIR-V  |
 
 ### Query - 2D Texture
 
 #### Query - 2D Texture - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                                                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2D.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2d-getdimensions) |
+| MSL     | `uint get_width(uint lod = 0)`                                                                                                                                                               |
 | SPIR-V  |
 
 #### Query - 2D Texture - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                                                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2D.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2d-getdimensions) |
+| MSL     | `uint get_height(uint lod = 0)`                                                                                                                                                              |
 | SPIR-V  |
 
 #### Query - 2D Texture - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       |
+| Target  | Function                                                                                                                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2D.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2d-getdimensions) |
+| MSL     | `uint get_num_mip_levels()`                                                                                                                                                                  |
 | SPIR-V  |
 
 ### Query - 2D Texture Array
 
 #### Query - 2D Texture Array - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                                                                                                                                                  | Comments
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2darray-getdimensions) |
+| MSL     | `uint get_width(uint lod = 0)`                                                                                                                                                                                            |
 | SPIR-V  |
 
 #### Query - 2D Texture Array - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                                                                                                                                                  | Comments
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2darray-getdimensions) |
+| MSL     | `uint get_height(uint lod = 0)`                                                                                                                                                                                           |
 | SPIR-V  |
 
 #### Query - 2D Texture Array - Number of array elements
 
-| Target  | Function
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| Target  | Function                                                                                                                                                                                                                  | Comments
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2darray-getdimensions) |
 | MSL     | `uint get_array_size()`
 | SPIR-V  |
 
 #### Query - 2D Texture Array - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       |
+| Target  | Function                                                                                                                                                                                                                  | Comments
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2darray-getdimensions) |
+| MSL     | `uint get_num_mip_levels()`                                                                                                                                                                                               |
 | SPIR-V  |
 
 ### Query - 3D Texture
@@ -781,7 +790,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`Texture3D.GetDimensions(in uint mip, out uint width, out uint height, out uint depth, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture3d-getdimensions) |
 | MSL     | `uint get_width(uint lod = 0)`                    |
 | SPIR-V  |
 
@@ -789,7 +798,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`Texture3D.GetDimensions(in uint mip, out uint width, out uint height, out uint depth, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture3d-getdimensions) |
 | MSL     | `uint get_height(uint lod = 0)`                   |
 | SPIR-V  |
 
@@ -797,7 +806,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`Texture3D.GetDimensions(in uint mip, out uint width, out uint height, out uint depth, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture3d-getdimensions) |
 | MSL     | `uint get_depth(uint lod = 0)`                   |
 | SPIR-V  |
 
@@ -805,7 +814,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`Texture3D.GetDimensions(in uint mip, out uint width, out uint height, out uint depth, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture3d-getdimensions) |
 | MSL     | `uint get_num_mip_levels()`                       |
 | SPIR-V  |
 
@@ -813,230 +822,230 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 #### Query - Cube Texture - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCube.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_width(uint lod = 0)`                                                               |
 | SPIR-V  |
 
 #### Query - Cube Texture - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCube.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_height(uint lod = 0)`                                                              |
 | SPIR-V  |
 
 #### Query - Cube Texture - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       |
+| Target  | Function                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCube.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_num_mip_levels()`                                                                  |
 | SPIR-V  |
 
 ### Query - Cube Texture Array
 
 #### Query - Cube Texture Array - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                                             | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCubeArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_width(uint lod = 0)`                                                                                       |
 | SPIR-V  |
 
 #### Query - Cube Texture Array - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                                             | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCubeArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_height(uint lod = 0)`                                                                                      |
 | SPIR-V  |
 
 #### Query - Cube Texture Array - Number of array elements
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `uint get_array_size()`
+| Target  | Function                                                                                                             | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCubeArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_array_size()`                                                                                              |
 | SPIR-V  |
 
 #### Query - Cube Texture Array - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       |
+| Target  | Function                                                                                                             | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCubeArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_num_mip_levels()`                                                                                          |
 | SPIR-V  |
 
 ### Query - 2D Multisampled Texture
 
 #### Query - 2D Multisampled Texture - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                                                                                                               | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DMS.GetDimensions(out uint width, out uint height, out uint num_samples)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2dms-getdimensions) |
+| MSL     | `uint get_width(uint lod = 0)`                                                                                                                                                         |
 | SPIR-V  |
 
 #### Query - 2D Multisampled Texture - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                                                                                                               | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DMS.GetDimensions(out uint width, out uint height, out uint num_samples)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2dms-getdimensions) |
+| MSL     | `uint get_height(uint lod = 0)`                                                                                                                                                        |
 | SPIR-V  |
 
 #### Query - 2D Multisampled Texture - Number of samples
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_samples()`                          |
+| Target  | Function                                                                                                                                                                               | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DMS.GetDimensions(out uint width, out uint height, out uint num_samples)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2dms-getdimensions) |
+| MSL     | `uint get_num_samples()`                                                                                                                                                               |
 | SPIR-V  |
 
 ### Query - 2D Depth Texture
 
 #### Query - 2D Depth Texture - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                                                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2D.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2d-getdimensions) |
+| MSL     | `uint get_width(uint lod = 0)`                                                                                                                                                               |
 | SPIR-V  |
 
 #### Query - 2D Depth Texture - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                                                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2D.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2d-getdimensions) |
+| MSL     | `uint get_height(uint lod = 0)`                                                                                                                                                              |
 | SPIR-V  |
 
 #### Query - 2D Depth Texture - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       |
+| Target  | Function                                                                                                                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2D.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2d-getdimensions) |
+| MSL     | `uint get_num_mip_levels()`                                                                                                                                                                  |
 | SPIR-V  |
 
 ### Query - 2D Depth Texture Array
 
 #### Query - 2D Depth Texture Array - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                                                                                                                                                  | Comments
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2darray-getdimensions) |
+| MSL     | `uint get_width(uint lod = 0)`                                                                                                                                                                                            |
 | SPIR-V  |
 
 #### Query - 2D Depth Texture Array - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                                                                                                                                                  | Comments
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2darray-getdimensions) |
+| MSL     | `uint get_height(uint lod = 0)`                                                                                                                                                                                           |
 | SPIR-V  |
 
 #### Query - 2D Depth Texture Array - Number of array elements
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_array_size()`                           |
+| Target  | Function                                                                                                                                                                                                                  | Comments
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2darray-getdimensions) |
+| MSL     | `uint get_array_size()`
 | SPIR-V  |
 
 #### Query - 2D Depth Texture Array - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       |
+| Target  | Function                                                                                                                                                                                                                  | Comments
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2darray-getdimensions) |
+| MSL     | `uint get_num_mip_levels()`                                                                                                                                                                                               |
 | SPIR-V  |
 
 ### Query - 2D Multisampled Depth Texture
 
 #### Query - 2D Multisampled Depth Texture - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                                                                                                               | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DMS.GetDimensions(out uint width, out uint height, out uint num_samples)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2dms-getdimensions) |
+| MSL     | `uint get_width(uint lod = 0)`                                                                                                                                                         |
 | SPIR-V  |
 
 #### Query - 2D Multisampled Depth Texture - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                                                                                                               | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DMS.GetDimensions(out uint width, out uint height, out uint num_samples)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2dms-getdimensions) |
+| MSL     | `uint get_height(uint lod = 0)`                                                                                                                                                        |
 | SPIR-V  |
 
 #### Query - 2D Multisampled Depth Texture - Number of samples
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_samples()`                           |
+| Target  | Function                                                                                                                                                                               | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Texture2DMS.GetDimensions(out uint width, out uint height, out uint num_samples)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/sm5-object-texture2dms-getdimensions) |
+| MSL     | `uint get_num_samples()`                                                                                                                                                               |
 | SPIR-V  |
 
 ### Query - Cube Depth Texture
 
 #### Query - Cube Depth Texture - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCube.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_width(uint lod = 0)`                                                               |
 | SPIR-V  |
 
 #### Query - Cube Depth Texture - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCube.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_height(uint lod = 0)`                                                              |
 | SPIR-V  |
 
 #### Query - Cube Depth Texture - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       |
+| Target  | Function                                                                                     | Comments
+|---------|----------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCube.GetDimensions(in uint mip, out uint width, out uint height, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_num_mip_levels()`                                                                  |
 | SPIR-V  |
 
 ### Query - Cube Depth Texture Array
 
 #### Query - Cube Depth Texture Array - Width
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_width(uint lod = 0)`                    |
+| Target  | Function                                                                                                             | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCubeArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_width(uint lod = 0)`                                                                                       |
 | SPIR-V  |
 
 #### Query - Cube Depth Texture Array - Height
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_height(uint lod = 0)`                   |
+| Target  | Function                                                                                                             | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCubeArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_height(uint lod = 0)`                                                                                      |
 | SPIR-V  |
 
 #### Query - Cube Depth Texture Array - Number of array elements
 
-| Target  | Function                                      | Comments
-|---------|-----------------------------------------------|----------------------------------------|
-| HLSL    |                                               |
-| MSL     | `uint get_array_size()`                       |
+| Target  | Function                                                                                                             | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCubeArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_array_size()`                                                                                              |
 | SPIR-V  |
 
 #### Query - Cube Depth Texture Array - Number of mips
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `uint get_num_mip_levels()`                       |
+| Target  | Function                                                                                                             | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | `TextureCubeArray.GetDimensions(in uint mip, out uint width, out uint height, out uint elements, out uint num_mips)` | Missing from documentation, but DXC accepts it.
+| MSL     | `uint get_num_mip_levels()`                                                                                          |
 | SPIR-V  |
