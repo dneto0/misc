@@ -2,9 +2,10 @@
 
 This document was created from the information found in:
 
-* [Metal Shading Language Specification](https://developer.apple.com/metal/Metal-Shading-Language-Specification.pdf) (MSL)
-
-All functions added after Metal 1.0 have been omitted.
+* [Metal Shading Language Specification](https://developer.apple.com/metal/Metal-Shading-Language-Specification.pdf) (MSL) \
+  All functions added after Metal 1.0 have been omitted.
+* [Direct3D HLSL Shader Model 4 Texture Object](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-to-type) \
+  All functions added after HLSL Shader Model 5.1 have been omitted.
 
 ## Sampling functions
 
@@ -12,7 +13,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`Tv Texture1D.Sample(sampler, float coord[, int offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1d-sample)
 | MSL     | `Tv sample(sampler, float coord)`
 | SPIR-V  |
 
@@ -20,7 +21,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`Tv Texture1DArray.Sample(sampler, float2 coord[, int offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1darray-sample)
 | MSL     | `Tv sample(sampler, float coord, uint array)`
 | SPIR-V  |
 
@@ -30,32 +31,32 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float2 coord, int2 offset = int2(0))`
+| HLSL    | [`Tv Texture2D.Sample(sampler, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture-sample-overload)
+| MSL     | `Tv sample(sampler s, float2 coord[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Texture - Bias
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float2 coord, bias(float), int2 offset = int2(0))`
+| HLSL    | [`Tv Texture2D.SampleBias(sampler, float2 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplebias)
+| MSL     | `Tv sample(sampler s, float2 coord, bias(float)[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Texture - Level
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float2 coord, level(float), int2 offset = int2(0))`
+| HLSL    | [`Tv Texture2D.SampleLevel(sampler, float2 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplelevel)
+| MSL     | `Tv sample(sampler s, float2 coord, level(float)[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Texture - Gradient
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float2 coord, gradient2d(float2 dx, float2 dy), int2 offset = int2(0))`
+| HLSL    | [`Tv Texture2D.SampleGrad(sampler, float2 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplegrad)
+| MSL     | `Tv sample(sampler s, float2 coord, gradient2d(float2 dx, float2 dy)[, int2 offset])`
 | SPIR-V  |
 
 ### Sample - 2D Texture Array
@@ -64,32 +65,32 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float2 coord, uint array, int2 offset = int2(0))`
+| HLSL    | [`Tv Texture2DArray.Sample(sampler, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-sample)
+| MSL     | `Tv sample(sampler s, float2 coord, uint array[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Texture Array - Bias
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float2 coord, uint array, bias(float), int2 offset = int2(0))`
+| HLSL    | [`Tv Texture2DArray.SampleBias(sampler, float3 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplebias)
+| MSL     | `Tv sample(sampler s, float2 coord, uint array, bias(float)[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Texture Array - Level
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float2 coord, uint array, level(float), int2 offset = int2(0))`
+| HLSL    | [`Tv Texture2DArray.SampleLevel(sampler, float3 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplelevel)
+| MSL     | `Tv sample(sampler s, float2 coord, uint array, level(float)[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Texture Array - Gradient
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float2 coord, uint array, gradient2d(float2 dx, float2 dy), int2 offset = int2(0))`
+| HLSL    | [`Tv Texture2DArray.SampleGrad(sampler, float3 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplegrad)
+| MSL     | `Tv sample(sampler s, float2 coord, uint array, gradient2d(float2 dx, float2 dy)[, int2 offset])`
 | SPIR-V  |
 
 ### Sample - 3D Texture
@@ -98,32 +99,32 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float3 coord, int3 offset = int3(0))`
+| HLSL    | [`Tv Texture3D.Sample(sampler, float3 coord[, int3 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-sample)
+| MSL     | `Tv sample(sampler s, float3 coord[, int3 offset])`
 | SPIR-V  |
 
 #### Sample - 3D Texture - Bias
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float3 coord, bias(float), int3 offset = int3(0))`
+| HLSL    | [`Tv Texture3D.SampleBias(sampler, float3 coord, float bias[, int3 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-samplebias)
+| MSL     | `Tv sample(sampler s, float3 coord, bias(float)[, int3 offset])`
 | SPIR-V  |
 
 #### Sample - 3D Texture - Level
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float3 coord, level(float), int3 offset = int3(0))`
+| HLSL    | [`Tv Texture3D.SampleLevel(sampler, float3 coord, float LOD[, int3 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-samplelevel)
+| MSL     | `Tv sample(sampler s, float3 coord, level(float)[, int3 offset])`
 | SPIR-V  |
 
 #### Sample - 3D Texture - Gradient
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `Tv sample(sampler s, float3 coord, gradient3d(float3 dx, float3 dy), int3 offset = int3(0))`
+| HLSL    | [`Tv Texture3D.SampleGrad(sampler, float3 coord, float3 ddx, float3 ddy[, int3 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-samplegrad)
+| MSL     | `Tv sample(sampler s, float3 coord, gradient3d(float3 dx, float3 dy)[, int3 offset])`
 | SPIR-V  |
 
 ### Sample - Cube Texture
@@ -132,7 +133,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`Tv TextureCube.Sample(sampler, float3 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-sample)
 | MSL     | `Tv sample(sampler s, float3 coord)`
 | SPIR-V  |
 
@@ -140,7 +141,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`Tv TextureCube.SampleBias(sampler, float3 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplebias)
 | MSL     | `Tv sample(sampler s, float3 coord, bias(float))`
 | SPIR-V  |
 
@@ -148,7 +149,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                           | Comments
 |---------|----------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`Tv TextureCube.SampleLevel(sampler, float3 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplelevel)
 | MSL     | `Tv sample(sampler s, float3 coord, level(float))` | Not entirely sure if this exists - spec is vague.
 | SPIR-V  |
 
@@ -156,7 +157,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`Tv TextureCube.SampleGrad(sampler, float3 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplegrad)
 | MSL     | `Tv sample(sampler s, float3 coord, gradientcube(float3 dx, float3 dy))`
 | SPIR-V  |
 
@@ -166,7 +167,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`Tv TextureCubeArray.Sample(sampler, float4 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-sample)
 | MSL     | `Tv sample(sampler s, float3 coord, uint array)`
 | SPIR-V  |
 
@@ -174,7 +175,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`Tv TextureCubeArray.SampleBias(sampler, float4 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplebias)
 | MSL     | `Tv sample(sampler s, float3 coord, uint array, bias(float))`
 | SPIR-V  |
 
@@ -182,7 +183,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                                       | Comments
 |---------|----------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                                |
+| HLSL    | [`Tv TextureCubeArray.SampleLevel(sampler, float4 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplelevel)
 | MSL     | `Tv sample(sampler s, float3 coord, uint array, level(float))` | Not entirely sure if this exists - spec is vague.
 | SPIR-V  |
 
@@ -190,7 +191,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`Tv TextureCubeArray.SampleGrad(sampler, float4 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplegrad)
 | MSL     | `Tv sample(sampler s, float3 coord, uint array, gradientcube(float3 dx, float3 dy))`
 | SPIR-V  |
 
@@ -200,32 +201,32 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample(sampler s, float2 coord, int2 offset = int2(0))`
+| HLSL    | [`T Texture2D.Sample(sampler, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture-sample-overload)
+| MSL     | `T sample(sampler s, float2 coord[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Depth Texture - Bias
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample(sampler s, float2 coord, bias(float), int2 offset = int2(0))`
+| HLSL    | [`T Texture2D.SampleBias(sampler, float2 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplebias)
+| MSL     | `T sample(sampler s, float2 coord, bias(float)[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Depth Texture - Level
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample(sampler s, float2 coord, level(float), int2 offset = int2(0))`
+| HLSL    | [`T Texture2D.SampleLevel(sampler, float2 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplelevel)
+| MSL     | `T sample(sampler s, float2 coord, level(float)[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Depth Texture - Gradient
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample(sampler s, float2 coord, gradient2d(float2 dx, float2 dy), int2 offset = int2(0))`
+| HLSL    | [`T Texture2D.SampleGrad(sampler, float2 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplegrad)
+| MSL     | `T sample(sampler s, float2 coord, gradient2d(float2 dx, float2 dy)[, int2 offset])`
 | SPIR-V  |
 
 ### Sample - 2D Depth Texture Array
@@ -234,32 +235,32 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample(sampler s, float2 coord, uint array, int2 offset = int2(0))`
+| HLSL    | [`T Texture2DArray.Sample(sampler, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-sample)
+| MSL     | `T sample(sampler s, float2 coord, uint array[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Depth Texture Array - Bias
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample(sampler s, float2 coord, uint array, bias(float), int2 offset = int2(0))`
+| HLSL    | [`T Texture2DArray.SampleBias(sampler, float3 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplebias)
+| MSL     | `T sample(sampler s, float2 coord, uint array, bias(float)[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Depth Texture Array - Level
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample(sampler s, float2 coord, uint array, level(float), int2 offset = int2(0))`
+| HLSL    | [`T Texture2DArray.SampleLevel(sampler, float3 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplelevel)
+| MSL     | `T sample(sampler s, float2 coord, uint array, level(float)[, int2 offset])`
 | SPIR-V  |
 
 #### Sample - 2D Depth Texture Array - Gradient
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample(sampler s, float2 coord, uint array, gradient2d(float2 dx, float2 dy), int2 offset = int2(0))`
+| HLSL    | [`T Texture2DArray.SampleGrad(sampler, float3 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplegrad)
+| MSL     | `T sample(sampler s, float2 coord, uint array, gradient2d(float2 dx, float2 dy)[, int2 offset])`
 | SPIR-V  |
 
 ### Sample - Cube Depth Texture
@@ -268,7 +269,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCube.Sample(sampler, float3 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-sample)
 | MSL     | `T sample(sampler s, float3 coord)`
 | SPIR-V  |
 
@@ -276,7 +277,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCube.SampleBias(sampler, float3 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplebias)
 | MSL     | `T sample(sampler s, float3 coord, bias(float))`
 | SPIR-V  |
 
@@ -284,7 +285,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCube.SampleLevel(sampler, float3 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplelevel)
 | MSL     | `T sample(sampler s, float3 coord, level(float))`
 | SPIR-V  |
 
@@ -292,7 +293,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCube.SampleGrad(sampler, float3 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplegrad)
 | MSL     | `T sample(sampler s, float3 coord, gradientcube(float3 dx, float3 dy))`
 | SPIR-V  |
 
@@ -302,7 +303,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCubeArray.Sample(sampler, float4 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-sample)
 | MSL     | `T sample(sampler s, float3 coord, uint array)`
 | SPIR-V  |
 
@@ -310,7 +311,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCubeArray.SampleBias(sampler, float4 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplebias)
 | MSL     | `T sample(sampler s, float3 coord, uint array, bias(float))`
 | SPIR-V  |
 
@@ -318,7 +319,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCubeArray.SampleLevel(sampler, float4 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplelevel)
 | MSL     | `T sample(sampler s, float3 coord, uint array, level(float))`
 | SPIR-V  |
 
@@ -326,7 +327,7 @@ All functions added after Metal 1.0 have been omitted.
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCubeArray.SampleGrad(sampler, float4 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplegrad)
 | MSL     | `T sample(sampler s, float3 coord, uint array, gradientcube(float3 dx, float3 dy))`
 | SPIR-V  |
 
@@ -344,16 +345,16 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                                                                 | Comments
 |---------|------------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample_compare(sampler s, float2 coord, float compare_value, int2 offset = int2(0))`  | `T` must be a float type
+| HLSL    | [`T Texture2D.SampleCmp(SamplerComparisonState, float2 coord, float compare_value[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplecmp)
+| MSL     | `T sample_compare(sampler s, float2 coord, float compare_value[, int2 offset])`  | `T` must be a float type
 | SPIR-V  |
 
 #### Sample & Compare - 2D Depth Texture - Level
 
-| Target  | Function                                                                                                  | Comments
-|---------|-----------------------------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample_compare(sampler s, float2 coord, float compare_value, level(float lod), int2 offset = int2(0))` | `T` must be a float type<br>`lod` **must** be a zero constant on macOS
+| Target  | Function                                                                                                                                                                                          | Comments
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`T Texture2D.SampleCmp(SamplerComparisonState, float2 coord, float compare_value[, int2 offset], float clamp)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplecmp) | `clamp` is used as a `max()` on the mip level selected.<br>See also: [`SampleCmpLevelZero()`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplecmplevelzero)
+| MSL     | `T sample_compare(sampler s, float2 coord, float compare_value, level(float lod)[, int2 offset])` | `T` must be a float type<br>`lod` **must** be a zero constant on macOS
 | SPIR-V  |
 
 ### Sample & Compare - 2D Depth Texture Array
@@ -362,16 +363,16 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                                                                             | Comments
 |---------|------------------------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample_compare(sampler s, float2 coord, uint array, float compare_value, int2 offset = int2(0))`  | `T` must be a float type
+| HLSL    | [`T Texture2DArray.SampleCmp(SamplerComparisonState, float3 coord, float compare_value[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplecmp)
+| MSL     | `T sample_compare(sampler s, float2 coord, uint array, float compare_value[, int2 offset])`  | `T` must be a float type
 | SPIR-V  |
 
 #### Sample & Compare - 2D Depth Texture Array - Level
 
-| Target  | Function                                                                                                              | Comments
-|---------|-----------------------------------------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |
-| MSL     | `T sample_compare(sampler s, float2 coord, uint array, float compare_value, level(float lod), int2 offset = int2(0))` | `T` must be a float type<br>`lod` **must** be a zero constant on macOS
+| Target  | Function                                                                                                                                                                                                    | Comments
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`T Texture2DArray.SampleCmp(SamplerComparisonState, float3 coord, float compare_value[, int2 offset], float clamp)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplecmp) | `clamp` is used as a `max()` on the mip level selected.<br>See also: [`SampleCmpLevelZero()`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplecmplevelzero)
+| MSL     | `T sample_compare(sampler s, float2 coord, uint array, float compare_value, level(float lod)[, int2 offset])` | `T` must be a float type<br>`lod` **must** be a zero constant on macOS
 | SPIR-V  |
 
 ### Sample & Compare - Cube Depth Texture
@@ -380,15 +381,15 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                                                                             | Comments
 |---------|------------------------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCube.SampleCmp(SamplerComparisonState, float3 coord, float compare_value)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplecmp)
 | MSL     | `T sample_compare(sampler s, float3 coord, float compare_value)`  | `T` must be a float type
 | SPIR-V  |
 
 #### Sample & Compare - Cube Depth Texture - Level
 
-| Target  | Function                                                                           | Comments
-|---------|------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |
+| Target  | Function                                                                                                                                                                               | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`T TextureCube.SampleCmp(SamplerComparisonState, float3 coord, float compare_value, float clamp)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplecmp) | `clamp` is used as a `max()` on the mip level selected.<br>See also: [`SampleCmpLevelZero()`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplecmplevelzero)
 | MSL     | `T sample_compare(sampler s, float3 coord, float compare_value, level(float lod))` | `T` must be a float type<br>`lod` **must** be a zero constant on macOS
 | SPIR-V  |
 
@@ -398,15 +399,15 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                                                                             | Comments
 |---------|------------------------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |
+| HLSL    | [`T TextureCubeArray.SampleCmp(SamplerComparisonState, float4 coord, float compare_value)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplecmp)
 | MSL     | `T sample_compare(sampler s, float3 coord, uint array, float compare_value)`  | `T` must be a float type
 | SPIR-V  |
 
 #### Sample & Compare - Cube Depth Texture Array - Level
 
-| Target  | Function                                                                           | Comments
-|---------|------------------------------------------------------------------------------------|----------------------------------------|
-| HLSL    |
+| Target  | Function                                                                                                                                                                                         | Comments
+|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`T TextureCubeArray.SampleCmp(SamplerComparisonState, float4 coord, float compare_value, float clamp)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplecmp) | `clamp` is used as a `max()` on the mip level selected.<br>See also: [`SampleCmpLevelZero()`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplecmplevelzero)
 | MSL     | `T sample_compare(sampler s, float3 coord, uint array, float compare_value, level(float lod))` | `T` must be a float type<br>`lod` **must** be a zero constant on macOS
 | SPIR-V  |
 
@@ -414,25 +415,25 @@ blended together as in normal texture filtering and the resulting value between
 
 ### Read - 1D Texture
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `Tv read(uint coord, uint lod = 0)`               | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
+| Target  | Function                                                                                                                    | Comments
+|---------|-----------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Tv Texture1D.Load(int2 coord[, int offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1d-load) |
+| MSL     | `Tv read(uint coord, uint lod = 0)`                                                                                         | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
 | SPIR-V  |
 
 ### Read - 1D Texture Array
 
-| Target  | Function                                          | Comments
-|---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
-| MSL     | `Tv read(uint coord, uint array, uint lod = 0)`   | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
+| Target  | Function                                                                                                                               | Comments
+|---------|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| HLSL    | [`Tv Texture1DArray.Load(int3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1darray-load) |
+| MSL     | `Tv read(uint coord, uint array, uint lod = 0)`                                                                                        | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.
 | SPIR-V  |
 
 ### Read - 2D Texture
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`Tv Texture2D.Load(int3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-load) |
 | MSL     | `Tv read(uint2 coord, uint lod = 0)`
 | SPIR-V  |
 
@@ -440,7 +441,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`Tv Texture2DArray.Load(int4 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-load) |
 | MSL     | `Tv read(uint2 coord, ushort array, uint lod = 0)`
 | SPIR-V  |
 
@@ -448,7 +449,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | [`Tv Texture3D.Load(int4 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-load) |
 | MSL     | `Tv read(uint3 coord, uint lod = 0)`
 | SPIR-V  |
 
@@ -456,7 +457,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                          | Comments
 |---------|---------------------------------------------------|----------------------------------------|
-| HLSL    |                                                   |
+| HLSL    | \<not-supported\>
 | MSL     | `Tv read(uint2 coord, uint face, uint lod = 0)`   | `face: [0: +X, 1: -X, 2: +Y, 3: -Y, 4: +Z, 5: -Z]`
 | SPIR-V  |
 
@@ -464,7 +465,7 @@ blended together as in normal texture filtering and the resulting value between
 
 | Target  | Function                                                    | Comments
 |---------|-------------------------------------------------------------|----------------------------------------|
-| HLSL    |                                                             |
+| HLSL    | \<not-supported\>
 | MSL     | `Tv read(uint2 coord, uint face, uint array, uint lod = 0)` | `face: [0: +X, 1: -X, 2: +Y, 3: -Y, 4: +Z, 5: -Z]`
 | SPIR-V  |
 
@@ -583,7 +584,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 | Target  | Function                                                                                | Comments
 |---------|-----------------------------------------------------------------------------------------|----------------------------------------|
 | HLSL    |                                                                                         |
-| MSL     | `Tv gather(sampler s, float2 coord, int2 offset = int2(0), component c = component::x)` |
+| MSL     | `Tv gather(sampler s, float2 coord[, int2 offset], component c = component::x)` |
 | SPIR-V  |
 
 ### Gather - 2D Texture Array
@@ -591,7 +592,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 | Target  | Function                                                                                | Comments
 |---------|-----------------------------------------------------------------------------------------|----------------------------------------|
 | HLSL    |                                                                                         |
-| MSL     | `Tv gather(sampler s, float2 coord, uint array, int2 offset = int2(0), component c = component::x)` |
+| MSL     | `Tv gather(sampler s, float2 coord, uint array[, int2 offset], component c = component::x)` |
 | SPIR-V  |
 
 ### Gather - Cube Texture
@@ -615,7 +616,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 | Target  | Function                                                    | Comments
 |---------|-------------------------------------------------------------|----------------------------------------|
 | HLSL    |                                                             |
-| MSL     | `Tv gather(sampler s, float2 coord, int2 offset = int2(0))` |
+| MSL     | `Tv gather(sampler s, float2 coord[, int2 offset])` |
 | SPIR-V  |
 
 ### Gather - 2D Depth Texture Array
@@ -623,7 +624,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 | Target  | Function                                                                | Comments
 |---------|-------------------------------------------------------------------------|----------------------------------------|
 | HLSL    |                                                                         |
-| MSL     | `Tv gather(sampler s, float2 coord, uint array, int2 offset = int2(0))` |
+| MSL     | `Tv gather(sampler s, float2 coord, uint array[, int2 offset])` |
 | SPIR-V  |
 
 ### Gather - Cube Depth Texture
@@ -641,7 +642,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 | Target  | Function                                                                                 | Comments
 |---------|------------------------------------------------------------------------------------------|----------------------------------------|
 | HLSL    |                                                                                          |
-| MSL     | `Tv gather_compare(sampler s, float2 coord, float compare_value, int2 offset = int2(0))` |
+| MSL     | `Tv gather_compare(sampler s, float2 coord, float compare_value[, int2 offset])` |
 | SPIR-V  |
 
 ### Gather Compare - 2D Depth Texture Array
@@ -649,7 +650,7 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 | Target  | Function                                                                                             | Comments
 |---------|------------------------------------------------------------------------------------------------------|----------------------------------------|
 | HLSL    |                                                                                                      |
-| MSL     | `Tv gather_compare(sampler s, float2 coord, uint array, float compare_value, int2 offset = int2(0))` |
+| MSL     | `Tv gather_compare(sampler s, float2 coord, uint array, float compare_value[, int2 offset])` |
 | SPIR-V  |
 
 ### Gather Compare - Cube Depth Texture
