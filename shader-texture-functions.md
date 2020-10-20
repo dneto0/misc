@@ -6,24 +6,29 @@ This document was created from the information found in:
   All functions added after Metal 1.0 have been omitted.
 * [Direct3D HLSL Shader Model 4 Texture Object](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-to-type) \
   All functions added after HLSL Shader Model 5.1 have been omitted.
+* [SPIR-V Specification 1.0](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html)
 
 ## Sampling functions
 
 ### Sample - 1D Texture
 
+> SPIR-V: Requires the [`Sampled1D` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
+
 | Target | Function                                                                                                                                  | Comments |
 |--------|-------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv Texture1D.Sample(sampler, float coord[, int offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1d-sample) |          |
 | MSL    | `Tv texture1d.sample(sampler, float coord)`                                                                                               |          |
-| SPIR-V |                                                                                                                                           |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)     |          |
 
 ### Sample - 1D Texture Array
 
-| Target | Function                                                                                                                                             | Comments |
-|--------|------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`Tv Texture1DArray.Sample(sampler, float2 coord[, int offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1darray-sample) |          |
-| MSL    | `Tv texture1d_array.sample(sampler, float coord, uint array)`                                                                                        |          |
-| SPIR-V |                                                                                                                                                      |          |
+> SPIR-V: Requires the [`Sampled1D` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
+
+| Target | Function                                                                                                                                             | Comments                  |
+|--------|------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`Tv Texture1DArray.Sample(sampler, float2 coord[, int offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1darray-sample) | Array index in `coord.y`  |
+| MSL    | `Tv texture1d_array.sample(sampler, float coord, uint array)`                                                                                        |                           |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)                | Array index in `coord[1]` |
 
 ### Sample - 2D Texture
 
@@ -33,7 +38,7 @@ This document was created from the information found in:
 |--------|----------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv Texture2D.Sample(sampler, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture-sample-overload) |          |
 | MSL    | `Tv texture2d.sample(sampler s, float2 coord[, int2 offset])`                                                                                      |          |
-| SPIR-V |                                                                                                                                                    |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)              |          |
 
 #### Sample - 2D Texture - Bias
 
@@ -41,7 +46,7 @@ This document was created from the information found in:
 |--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv Texture2D.SampleBias(sampler, float2 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplebias) |          |
 | MSL    | `Tv texture2d.sample(sampler s, float2 coord, bias(float)[, int2 offset])`                                                                                      |          |
-| SPIR-V |                                                                                                                                                                 |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)               |          |
 
 #### Sample - 2D Texture - Level
 
@@ -49,7 +54,7 @@ This document was created from the information found in:
 |--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv Texture2D.SampleLevel(sampler, float2 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplelevel) |          |
 | MSL    | `Tv texture2d.sample(sampler s, float2 coord, level(float)[, int2 offset])`                                                                                      |          |
-| SPIR-V |                                                                                                                                                                  |          |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Lod <lod>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                  |          |
 
 #### Sample - 2D Texture - Gradient
 
@@ -57,41 +62,41 @@ This document was created from the information found in:
 |--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv Texture2D.SampleGrad(sampler, float2 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplegrad) |          |
 | MSL    | `Tv texture2d.sample(sampler s, float2 coord, gradient2d(float2 dx, float2 dy)[, int2 offset])`                                                                             |          |
-| SPIR-V |                                                                                                                                                                             |          |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Grad <dx> <dy>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                        |          |
 
 ### Sample - 2D Texture Array
 
 #### Sample - 2D Texture Array - Basic
 
-| Target | Function                                                                                                                                              | Comments |
-|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`Tv Texture2DArray.Sample(sampler, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-sample) |          |
-| MSL    | `Tv texture2d_array.sample(sampler s, float2 coord, uint array[, int2 offset])`                                                                       |          |
-| SPIR-V |                                                                                                                                                       |          |
+| Target | Function                                                                                                                                              | Comments                  |
+|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`Tv Texture2DArray.Sample(sampler, float3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-sample) | Array index in `coord.z`  |
+| MSL    | `Tv texture2d_array.sample(sampler s, float2 coord, uint array[, int2 offset])`                                                                       |                           |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)                 | Array index in `coord[2]` |
 
 #### Sample - 2D Texture Array - Bias
 
-| Target | Function                                                                                                                                                                  | Comments |
-|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`Tv Texture2DArray.SampleBias(sampler, float3 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplebias) |          |
-| MSL    | `Tv texture2d_array.sample(sampler s, float2 coord, uint array, bias(float)[, int2 offset])`                                                                              |          |
-| SPIR-V |                                                                                                                                                                           |          |
+| Target | Function                                                                                                                                                                  | Comments                  |
+|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`Tv Texture2DArray.SampleBias(sampler, float3 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplebias) | Array index in `coord.z`  |
+| MSL    | `Tv texture2d_array.sample(sampler s, float2 coord, uint array, bias(float)[, int2 offset])`                                                                              |                           |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)                         | Array index in `coord[2]` |
 
 #### Sample - 2D Texture Array - Level
 
-| Target | Function                                                                                                                                                                   | Comments |
-|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`Tv Texture2DArray.SampleLevel(sampler, float3 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplelevel) |          |
-| MSL    | `Tv texture2d_array.sample(sampler s, float2 coord, uint array, level(float)[, int2 offset])`                                                                              |          |
-| SPIR-V |                                                                                                                                                                            |          |
+| Target | Function                                                                                                                                                                   | Comments                  |
+|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`Tv Texture2DArray.SampleLevel(sampler, float3 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplelevel) | Array index in `coord.z`  |
+| MSL    | `Tv texture2d_array.sample(sampler s, float2 coord, uint array, level(float)[, int2 offset])`                                                                              |                           |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Lod <lod>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                            | Array index in `coord[2]` |
 
 #### Sample - 2D Texture Array - Gradient
 
-| Target | Function                                                                                                                                                                              | Comments |
-|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`Tv Texture2DArray.SampleGrad(sampler, float3 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplegrad) |          |
-| MSL    | `Tv texture2d_array.sample(sampler s, float2 coord, uint array, gradient2d(float2 dx, float2 dy)[, int2 offset])`                                                                     |          |
-| SPIR-V |                                                                                                                                                                                       |          |
+| Target | Function                                                                                                                                                                              | Comments                  |
+|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`Tv Texture2DArray.SampleGrad(sampler, float3 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplegrad) | Array index in `coord.z`  |
+| MSL    | `Tv texture2d_array.sample(sampler s, float2 coord, uint array, gradient2d(float2 dx, float2 dy)[, int2 offset])`                                                                     |                           |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Grad <dx> <dy>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                                  | Array index in `coord[2]` |
 
 ### Sample - 3D Texture
 
@@ -101,7 +106,7 @@ This document was created from the information found in:
 |--------|---------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv Texture3D.Sample(sampler, float3 coord[, int3 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-sample) |          |
 | MSL    | `Tv texture3d.sample(sampler s, float3 coord[, int3 offset])`                                                                               |          |
-| SPIR-V |                                                                                                                                             |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)       |          |
 
 #### Sample - 3D Texture - Bias
 
@@ -109,7 +114,7 @@ This document was created from the information found in:
 |--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv Texture3D.SampleBias(sampler, float3 coord, float bias[, int3 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-samplebias) |          |
 | MSL    | `Tv texture3d.sample(sampler s, float3 coord, bias(float)[, int3 offset])`                                                                                      |          |
-| SPIR-V |                                                                                                                                                                 |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)               |          |
 
 #### Sample - 3D Texture - Level
 
@@ -117,7 +122,7 @@ This document was created from the information found in:
 |--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv Texture3D.SampleLevel(sampler, float3 coord, float LOD[, int3 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-samplelevel) |          |
 | MSL    | `Tv texture3d.sample(sampler s, float3 coord, level(float)[, int3 offset])`                                                                                      |          |
-| SPIR-V |                                                                                                                                                                  |          |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Lod <lod>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                  |          |
 
 #### Sample - 3D Texture - Gradient
 
@@ -125,17 +130,17 @@ This document was created from the information found in:
 |--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv Texture3D.SampleGrad(sampler, float3 coord, float3 ddx, float3 ddy[, int3 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-samplegrad) |          |
 | MSL    | `Tv texture3d.sample(sampler s, float3 coord, gradient3d(float3 dx, float3 dy)[, int3 offset])`                                                                             |          |
-| SPIR-V |                                                                                                                                                                             |          |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Grad <dx> <dy>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                        |          |
 
 ### Sample - Cube Texture
 
 #### Sample - Cube Texture - Basic
 
-| Target | Function                                                                                                                         | Comments |
-|--------|----------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`Tv TextureCube.Sample(sampler, float3 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-sample) |          |
-| MSL    | `Tv texturecube.sample(sampler s, float3 coord)`                                                                                 |          |
-| SPIR-V |                                                                                                                                  |          |
+| Target | Function                                                                                                                                          | Comments |
+|--------|---------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| HLSL   | [`Tv TextureCube.Sample(sampler, float3 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-sample)                  |          |
+| MSL    | `Tv texturecube.sample(sampler s, float3 coord)`                                                                                                  |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod) |          |
 
 #### Sample - Cube Texture - Bias
 
@@ -143,7 +148,7 @@ This document was created from the information found in:
 |--------|------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv TextureCube.SampleBias(sampler, float3 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplebias) |          |
 | MSL    | `Tv texturecube.sample(sampler s, float3 coord, bias(float))`                                                                                        |          |
-| SPIR-V |                                                                                                                                                      |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)    |          |
 
 #### Sample - Cube Texture - Level
 
@@ -151,7 +156,7 @@ This document was created from the information found in:
 |--------|-------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
 | HLSL   | [`Tv TextureCube.SampleLevel(sampler, float3 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplelevel) |                                                   |
 | MSL    | `Tv texturecube.sample(sampler s, float3 coord, level(float))`                                                                                        | Not entirely sure if this exists - spec is vague. |
-| SPIR-V |                                                                                                                                                       |                                                   |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Lod <lod>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)       |                                                   |
 
 #### Sample - Cube Texture - Gradient
 
@@ -159,41 +164,45 @@ This document was created from the information found in:
 |--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`Tv TextureCube.SampleGrad(sampler, float3 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplegrad) |          |
 | MSL    | `Tv texturecube.sample(sampler s, float3 coord, gradientcube(float3 dx, float3 dy))`                                                                             |          |
-| SPIR-V |                                                                                                                                                                  |          |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Grad <dx> <dy>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)             |          |
 
 ### Sample - Cube Texture Array
 
+> SPIR-V: Requires the [`ImageCubeArray` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
+
 #### Sample - Cube Texture Array - Basic
 
-| Target | Function                                                                                                                                   | Comments |
-|--------|--------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`Tv TextureCubeArray.Sample(sampler, float4 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-sample) |          |
-| MSL    | `Tv texturecube_array.sample(sampler s, float3 coord, uint array)`                                                                         |          |
-| SPIR-V |                                                                                                                                            |          |
+| Target | Function                                                                                                                                   | Comments                  |
+|--------|--------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`Tv TextureCubeArray.Sample(sampler, float4 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-sample) | Array index in `coord.w`  |
+| MSL    | `Tv texturecube_array.sample(sampler s, float3 coord, uint array)`                                                                         |                           |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)      | Array index in `coord[3]` |
 
 #### Sample - Cube Texture Array - Bias
 
-| Target | Function                                                                                                                                                       | Comments |
-|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`Tv TextureCubeArray.SampleBias(sampler, float4 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplebias) |          |
-| MSL    | `Tv texturecube_array.sample(sampler s, float3 coord, uint array, bias(float))`                                                                                |          |
-| SPIR-V |                                                                                                                                                                |          |
+| Target | Function                                                                                                                                                       | Comments                  |
+|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`Tv TextureCubeArray.SampleBias(sampler, float4 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplebias) | Array index in `coord.w`  |
+| MSL    | `Tv texturecube_array.sample(sampler s, float3 coord, uint array, bias(float))`                                                                                |                           |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)              | Array index in `coord[3]` |
 
 #### Sample - Cube Texture Array - Level
 
 | Target | Function                                                                                                                                                        | Comments                                          |
 |--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| HLSL   | [`Tv TextureCubeArray.SampleLevel(sampler, float4 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplelevel) |                                                   |
+| HLSL   | [`Tv TextureCubeArray.SampleLevel(sampler, float4 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplelevel) | Array index in `coord.w`                          |
 | MSL    | `Tv texturecube_array.sample(sampler s, float3 coord, uint array, level(float))`                                                                                | Not entirely sure if this exists - spec is vague. |
-| SPIR-V |                                                                                                                                                                 |                                                   |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Lod <lod>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)                 | Array index in `coord[3]`                         |
 
 #### Sample - Cube Texture Array - Gradient
 
-| Target | Function                                                                                                                                                                   | Comments |
-|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`Tv TextureCubeArray.SampleGrad(sampler, float4 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplegrad) |          |
-| MSL    | `Tv texturecube_array.sample(sampler s, float3 coord, uint array, gradientcube(float3 dx, float3 dy))`                                                                     |          |
-| SPIR-V |                                                                                                                                                                            |          |
+> SPIR-V: Requires the [`ImageCubeArray` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
+
+| Target | Function                                                                                                                                                                   | Comments                  |
+|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`Tv TextureCubeArray.SampleGrad(sampler, float4 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplegrad) | Array index in `coord.w`  |
+| MSL    | `Tv texturecube_array.sample(sampler s, float3 coord, uint array, gradientcube(float3 dx, float3 dy))`                                                                     |                           |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Grad <dx> <dy>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)                       | Array index in `coord[3]` |
 
 ### Sample - 2D Depth Texture
 
@@ -203,7 +212,7 @@ This document was created from the information found in:
 |--------|---------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`T Texture2D.Sample(sampler, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture-sample-overload) |          |
 | MSL    | `T depth2d.sample(sampler s, float2 coord[, int2 offset])`                                                                                        |          |
-| SPIR-V |                                                                                                                                                   |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)             |          |
 
 #### Sample - 2D Depth Texture - Bias
 
@@ -211,7 +220,7 @@ This document was created from the information found in:
 |--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`T Texture2D.SampleBias(sampler, float2 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplebias) |          |
 | MSL    | `T depth2d.sample(sampler s, float2 coord, bias(float)[, int2 offset])`                                                                                        |          |
-| SPIR-V |                                                                                                                                                                |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)              |          |
 
 #### Sample - 2D Depth Texture - Level
 
@@ -219,7 +228,7 @@ This document was created from the information found in:
 |--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`T Texture2D.SampleLevel(sampler, float2 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplelevel) |          |
 | MSL    | `T depth2d.sample(sampler s, float2 coord, level(float)[, int2 offset])`                                                                                        |          |
-| SPIR-V |                                                                                                                                                                 |          |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Lod <lod>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                 |          |
 
 #### Sample - 2D Depth Texture - Gradient
 
@@ -227,51 +236,51 @@ This document was created from the information found in:
 |--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`T Texture2D.SampleGrad(sampler, float2 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-samplegrad) |          |
 | MSL    | `T depth2d.sample(sampler s, float2 coord, gradient2d(float2 dx, float2 dy)[, int2 offset])`                                                                               |          |
-| SPIR-V |                                                                                                                                                                            |          |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Grad <dx> <dy>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                       |          |
 
 ### Sample - 2D Depth Texture Array
 
 #### Sample - 2D Depth Texture Array - Basic
 
-| Target | Function                                                                                                                                             | Comments |
-|--------|------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`T Texture2DArray.Sample(sampler, float2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-sample) |          |
-| MSL    | `T depth2d_array.sample(sampler s, float2 coord, uint array[, int2 offset])`                                                                         |          |
-| SPIR-V |                                                                                                                                                      |          |
+| Target | Function                                                                                                                                             | Comments                  |
+|--------|------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`T Texture2DArray.Sample(sampler, float3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-sample) | Array index in `coord.z`  |
+| MSL    | `T depth2d_array.sample(sampler s, float2 coord, uint array[, int2 offset])`                                                                         |                           |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)                | Array index in `coord[2]` |
 
 #### Sample - 2D Depth Texture Array - Bias
 
-| Target | Function                                                                                                                                                                 | Comments |
-|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`T Texture2DArray.SampleBias(sampler, float3 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplebias) |          |
-| MSL    | `T depth2d_array.sample(sampler s, float2 coord, uint array, bias(float)[, int2 offset])`                                                                                |          |
-| SPIR-V |                                                                                                                                                                          |          |
+| Target | Function                                                                                                                                                                 | Comments                  |
+|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`T Texture2DArray.SampleBias(sampler, float3 coord, float bias[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplebias) | Array index in `coord.z`  |
+| MSL    | `T depth2d_array.sample(sampler s, float2 coord, uint array, bias(float)[, int2 offset])`                                                                                |                           |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)                        | Array index in `coord[2]` |
 
 #### Sample - 2D Depth Texture Array - Level
 
-| Target | Function                                                                                                                                                                  | Comments |
-|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`T Texture2DArray.SampleLevel(sampler, float3 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplelevel) |          |
-| MSL    | `T depth2d_array.sample(sampler s, float2 coord, uint array, level(float)[, int2 offset])`                                                                                |          |
-| SPIR-V |                                                                                                                                                                           |          |
+| Target | Function                                                                                                                                                                  | Comments                  |
+|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`T Texture2DArray.SampleLevel(sampler, float3 coord, float LOD[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplelevel) | Array index in `coord.z`  |
+| MSL    | `T depth2d_array.sample(sampler s, float2 coord, uint array, level(float)[, int2 offset])`                                                                                |                           |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Lod <lod>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                           | Array index in `coord[2]` |
 
 #### Sample - 2D Depth Texture Array - Gradient
 
-| Target | Function                                                                                                                                                                             | Comments |
-|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`T Texture2DArray.SampleGrad(sampler, float3 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplegrad) |          |
-| MSL    | `T depth2d_array.sample(sampler s, float2 coord, uint array, gradient2d(float2 dx, float2 dy)[, int2 offset])`                                                                       |          |
-| SPIR-V |                                                                                                                                                                                      |          |
+| Target | Function                                                                                                                                                                             | Comments                  |
+|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`T Texture2DArray.SampleGrad(sampler, float3 coord, float2 ddx, float2 ddy[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-samplegrad) | Array index in `coord.z`  |
+| MSL    | `T depth2d_array.sample(sampler s, float2 coord, uint array, gradient2d(float2 dx, float2 dy)[, int2 offset])`                                                                       |                           |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Grad <dx> <dy>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)                                 | Array index in `coord[2]` |
 
 ### Sample - Cube Depth Texture
 
 #### Sample - Cube Depth Texture - Basic
 
-| Target | Function                                                                                                                        | Comments |
-|--------|---------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`T TextureCube.Sample(sampler, float3 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-sample) |          |
-| MSL    | `T depthcube.sample(sampler s, float3 coord)`                                                                                   |          |
-| SPIR-V |                                                                                                                                 |          |
+| Target | Function                                                                                                                                          | Comments |
+|--------|---------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| HLSL   | [`T TextureCube.Sample(sampler, float3 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-sample)                   |          |
+| MSL    | `T depthcube.sample(sampler s, float3 coord)`                                                                                                     |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod) |          |
 
 #### Sample - Cube Depth Texture - Bias
 
@@ -279,7 +288,7 @@ This document was created from the information found in:
 |--------|-----------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`T TextureCube.SampleBias(sampler, float3 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplebias) |          |
 | MSL    | `T depthcube.sample(sampler s, float3 coord, bias(float))`                                                                                          |          |
-| SPIR-V |                                                                                                                                                     |          |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)   |          |
 
 #### Sample - Cube Depth Texture - Level
 
@@ -287,7 +296,7 @@ This document was created from the information found in:
 |--------|------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`T TextureCube.SampleLevel(sampler, float3 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplelevel) |          |
 | MSL    | `T depthcube.sample(sampler s, float3 coord, level(float))`                                                                                          |          |
-| SPIR-V |                                                                                                                                                      |          |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Lod <lod>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)      |          |
 
 #### Sample - Cube Depth Texture - Gradient
 
@@ -295,41 +304,41 @@ This document was created from the information found in:
 |--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL   | [`T TextureCube.SampleGrad(sampler, float3 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecube-samplegrad) |          |
 | MSL    | `T depthcube.sample(sampler s, float3 coord, gradientcube(float3 dx, float3 dy))`                                                                               |          |
-| SPIR-V |                                                                                                                                                                 |          |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Grad <dx> <dy>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleExplicitLod)            |          |
 
 ### Sample - Cube Depth Texture Array
 
 #### Sample - Cube Depth Texture Array - Basic
 
-| Target | Function                                                                                                                                  | Comments |
-|--------|-------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`T TextureCubeArray.Sample(sampler, float4 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-sample) |          |
-| MSL    | `T depthcube_array.sample(sampler s, float3 coord, uint array)`                                                                           |          |
-| SPIR-V |                                                                                                                                           |          |
+| Target | Function                                                                                                                                  | Comments                  |
+|--------|-------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`T TextureCubeArray.Sample(sampler, float4 coord)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-sample) | Array index in `coord.w`  |
+| MSL    | `T depthcube_array.sample(sampler s, float3 coord, uint array)`                                                                           |                           |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)     | Array index in `coord[3]` |
 
 #### Sample - Cube Depth Texture Array - Bias
 
-| Target | Function                                                                                                                                                      | Comments |
-|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`T TextureCubeArray.SampleBias(sampler, float4 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplebias) |          |
-| MSL    | `T depthcube_array.sample(sampler s, float3 coord, uint array, bias(float))`                                                                                  |          |
-| SPIR-V |                                                                                                                                                               |          |
+| Target | Function                                                                                                                                                      | Comments                  |
+|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`T TextureCubeArray.SampleBias(sampler, float4 coord, float bias)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplebias) | Array index in `coord.w`  |
+| MSL    | `T depthcube_array.sample(sampler s, float3 coord, uint array, bias(float))`                                                                                  |                           |
+| SPIR-V | [`OpImageSampleImplicitLod <sampler> <coord> Bias <bias>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)             | Array index in `coord[3]` |
 
 #### Sample - Cube Depth Texture Array - Level
 
-| Target | Function                                                                                                                                                       | Comments |
-|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`T TextureCubeArray.SampleLevel(sampler, float4 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplelevel) |          |
-| MSL    | `T depthcube_array.sample(sampler s, float3 coord, uint array, level(float))`                                                                                  |          |
-| SPIR-V |                                                                                                                                                                |          |
+| Target | Function                                                                                                                                                       | Comments                  |
+|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`T TextureCubeArray.SampleLevel(sampler, float4 coord, float LOD)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplelevel) | Array index in `coord.w`  |
+| MSL    | `T depthcube_array.sample(sampler s, float3 coord, uint array, level(float))`                                                                                  |                           |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Lod <lod>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)                | Array index in `coord[3]` |
 
 #### Sample - Cube Depth Texture Array - Gradient
 
-| Target | Function                                                                                                                                                                  | Comments |
-|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-| HLSL   | [`T TextureCubeArray.SampleGrad(sampler, float4 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplegrad) |          |
-| MSL    | `T depthcube_array.sample(sampler s, float3 coord, uint array, gradientcube(float3 dx, float3 dy))`                                                                       |          |
-| SPIR-V |                                                                                                                                                                           |          |
+| Target | Function                                                                                                                                                                  | Comments                  |
+|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| HLSL   | [`T TextureCubeArray.SampleGrad(sampler, float4 coord, float3 ddx, float3 ddy)`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texturecubearray-samplegrad) | Array index in `coord.w`  |
+| MSL    | `T depthcube_array.sample(sampler s, float3 coord, uint array, gradientcube(float3 dx, float3 dy))`                                                                       |                           |
+| SPIR-V | [`OpImageSampleExplicitLod <sampler> <coord> Grad <dx> <dy>`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageSampleImplicitLod)                      | Array index in `coord[3]` |
 
 ## Sampling & Compare functions
 
@@ -415,6 +424,8 @@ blended together as in normal texture filtering and the resulting value between
 
 ### Read - 1D Texture
 
+> SPIR-V: Requires the [`Image1D` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
+
 | Target | Function                                                                                                                    | Comments                                                             |
 |--------|-----------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
 | HLSL   | [`Tv Texture1D.Load(int2 coord[, int offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1d-load) |                                                                      |
@@ -422,6 +433,8 @@ blended together as in normal texture filtering and the resulting value between
 | SPIR-V |                                                                                                                             |                                                                      |
 
 ### Read - 1D Texture Array
+
+> SPIR-V: Requires the [`Image1D` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
 
 | Target | Function                                                                                                                               | Comments                                                             |
 |--------|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
@@ -462,6 +475,8 @@ blended together as in normal texture filtering and the resulting value between
 | SPIR-V |                                                             |                                                    |
 
 ### Read - Cube Texture Array
+
+> SPIR-V: Requires the [`ImageCubeArray` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
 
 | Target | Function                                                                      | Comments                                           |
 |--------|-------------------------------------------------------------------------------|----------------------------------------------------|
@@ -578,6 +593,8 @@ shader and then declare and use a Texture1D object as tex in a pixel shader.
 
 ### Write - Cube Texture Array
 
+> SPIR-V: Requires the [`ImageCubeArray` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
+
 | Target | Function                                                                                   | Comments                                                                              |
 |--------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
 | HLSL   | \<not-supported\>                                                                          |                                                                                       |
@@ -613,6 +630,8 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 | SPIR-V |                                                                                                                                                          |          |
 
 ### Gather - Cube Texture Array
+
+> SPIR-V: Requires the [`ImageCubeArray` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
 
 | Target | Function                                                                                                                                                           | Comments |
 |--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
@@ -846,6 +865,8 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 
 ### Query - Cube Texture Array
 
+> SPIR-V: Requires the [`ImageCubeArray` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
+
 #### Query - Cube Texture Array - Width
 
 | Target | Function                                                                                                             | Comments                                        |
@@ -871,6 +892,8 @@ A gather returns 4 samples of a specified channel (r,g,b,a) for bilinear interpo
 | SPIR-V |                                                                                                                      |                                                 |
 
 #### Query - Cube Texture Array - Number of mips
+
+> SPIR-V: Requires the [`ImageCubeArray` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability).
 
 | Target | Function                                                                                                             | Comments                                        |
 |--------|----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
