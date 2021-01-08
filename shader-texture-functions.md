@@ -340,6 +340,10 @@ and `0.0` if it fails). These comparison result values per-pixel are then
 blended together as in normal texture filtering and the resulting value between
 `0.0` and `1.0` is returned.
 
+> Metal Shading Language, 6.10 Texture Functions:
+On macOS, for `sample_compare` functions, `bias` and `gradient*` are not supported, and `lod`
+must be a zero constant.
+
 ### Sample & Compare - 2D Depth Texture
 
 #### Sample & Compare - 2D Depth Texture - Basic
