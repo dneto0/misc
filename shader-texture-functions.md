@@ -414,13 +414,17 @@ blended together as in normal texture filtering and the resulting value between
 
 ## Read
 
+SPIR-V:  Use ImageFetch for sampled images, and ImageRead for storage images.
+
+Issue: The listing below does not distinguish between sampled textures and storage textures. For now it only lists the sampled texture variants.
+
 ### Read - 1D Texture
 
 | Backend | Function                                                                                                                      | Comments                                                                                                                         |
 |---------|-------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
 | HLSL    | [`Tv Texture1D.Load(int2 coord[, int offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1d-load)   | Array index in `coord.y`.                                                                                                        |
 | MSL     | `Tv texture1d.read(uint coord, uint lod = 0)`                                                                                 | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.                                                             |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead) | Requires the [`Image1D` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability). |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch) | Requires the [`Image1D` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability). |
 
 ### Read - 1D Texture Array
 
@@ -428,7 +432,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|---------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | HLSL    | [`Tv Texture1DArray.Load(int3 coord[, int offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture1darray-load) | Array index in `coord.y`.                                                                                                                                      |
 | MSL     | `Tv texture1d_array.read(uint coord, uint array, uint lod = 0)`                                                                       | Mipmaps are not supported for 1D textures.<br>`lod` **must** be `0`.                                                                                           |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead)         | Array index in `coord[1]`.<br>Requires the [`Image1D` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability). |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch)         | Array index in `coord[1]`.<br>Requires the [`Image1D` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability). |
 
 ### Read - 2D Texture
 
@@ -436,7 +440,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|-------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL    | [`Tv Texture2D.Load(int2 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-load)  |          |
 | MSL     | `Tv texture2d.read(uint2 coord, uint lod = 0)`                                                                                |          |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead) |          |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch) |          |
 
 ### Read - 2D Texture Array
 
@@ -444,7 +448,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
 | HLSL    | [`Tv Texture2DArray.Load(int3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-load) | Array index in `coord.z`.  |
 | MSL     | `Tv texture2d_array.read(uint2 coord, ushort array, uint lod = 0)`                                                                     |                            |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead)          | Array index in `coord[2]`. |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch)          | Array index in `coord[2]`. |
 
 ### Read - 3D Texture
 
@@ -452,7 +456,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|-------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL    | [`Tv Texture3D.Load(int4 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture3d-load)  |          |
 | MSL     | `Tv texture3d.read(uint3 coord, uint lod = 0)`                                                                                |          |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead) |          |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch) |          |
 
 ### Read - Cube Texture
 
@@ -460,7 +464,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|-------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
 | HLSL    | \<not-supported\>                                                                                                             |                                                     |
 | MSL     | `Tv texturecube.read(uint3 coord, uint face, uint lod = 0)`                                                                   | `face: [0: +X, 1: -X, 2: +Y, 3: -Y, 4: +Z, 5: -Z]`. |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead) |                                                     |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch) |                                                     |
 
 ### Read - Cube Texture Array
 
@@ -468,7 +472,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|-------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | HLSL    | \<not-supported\>                                                                                                             |                                                                                                                                                                       |
 | MSL     | `Tv texturecube_array.read(uint3 coord, uint face, uint array, uint lod = 0)`                                                 | `face: [0: +X, 1: -X, 2: +Y, 3: -Y, 4: +Z, 5: -Z]`.                                                                                                                   |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead) | Array index in `coord[4]`.<br>Requires the [`ImageCubeArray` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability). |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch) | Array index in `coord[4]`.<br>Requires the [`ImageCubeArray` capability](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#_a_id_capability_a_capability). |
 
 ### Read - 2D Multisampled Texture
 
@@ -476,7 +480,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|--------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------|
 | HLSL    | [`Tv Texture2DMS.Load(int3 coord, int sample[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-load) |                                                                            |
 | MSL     | `Tv texture2d_ms.read(uint2 coord, uint sample)`                                                                                           | `MTLRenderPassDescriptor.setSamplePositions` can specify sample positions. |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead)              |                                                                            |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch)              |                                                                            |
 
 ### Read - 2D Depth Texture
 
@@ -484,7 +488,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|-------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL    | [`T Texture2D.Load(int3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-load)   |          |
 | MSL     | `T depth2d.read(uint2 coord, uint lod = 0)`                                                                                   |          |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead) |          |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch) | Depth images are sampled images, so Sampeld=1, implying ImageFetch instead of ImageRead |
 
 ### Read - 2D Depth Texture Array
 
@@ -492,7 +496,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|---------------------------------------------------------------------------------------------------------------------------------------|----------------------------|
 | HLSL    | [`T Texture2DArray.Load(int3 coord[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2darray-load) | Array index in `coord.z`.  |
 | MSL     | `T depth2d_array.read(uint2 coord, uint array, uint lod = 0)`                                                                         |                            |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead)         | Array index in `coord[3]`. |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch)         | Array index in `coord[3]`. |
 
 ### Read - 2D Multisampled Depth Texture
 
@@ -500,7 +504,7 @@ blended together as in normal texture filtering and the resulting value between
 |---------|-------------------------------------------------------------------------------------------------------------------------------------------|----------|
 | HLSL    | [`T Texture2DMS.Load(int3 coord, int sample[, int2 offset])`](https://docs.microsoft.com/en-us/windows/win32/direct3dhlsl/texture2d-load) |          |
 | MSL     | `T depth2d_ms.read(uint2 coord, uint sample)`                                                                                             |          |
-| SPIR-V  | [`OpImageRead <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageRead)             |          |
+| SPIR-V  | [`OpImageFetch <image> <coord> [image-operands...]`](https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.html#OpImageFetch)             |          |
 
 ### Read - Cube Depth Texture
 
