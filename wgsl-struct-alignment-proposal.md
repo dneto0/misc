@@ -39,7 +39,7 @@ The rules for aligning a struct field:
 * Structures themselves are always 16 byte aligned.
 * The first field is always at offset 0 of the structure.
 * Subsequent fields have an offset that is the next alignment after the previous field offset + previous field size. 
-* Structures nested inside other structures will be aligned to a 16 bytes, but fields can be treated as inlined 
+* Structures nested inside other structures will be aligned to a 16 bytes, but fields can otherwise be treated as inlined 
   (there's no special rules for padding at the end of a nested structure).  
 
 Example:
