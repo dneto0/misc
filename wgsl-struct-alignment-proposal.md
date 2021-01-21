@@ -212,6 +212,106 @@ fn foo() -> vec3<f32> {
 }
 ```
 
+#### Notes on replacing the inner type by an outer type
+
+The technique of inlining an inner struct into outer struct type has non-local effects.
+For example the inner struct type might be used in other contexts:
+
+* As a value type when constructing a value or declaring a `const`.
+* Used as the store type for a pointer value, and then used later in the function.
+* As a value type used as a function parameter
+* Used as the store type for a pointer value, used as a function parameter
+
+##### Replacing value of the inner type within a function
+
+In this case the inner type is used as a value type when constructing a value or declaring a `const`.
+
+We can type-construct the inner-type value on demand, and decompose it on demand.
+
+#### Replacing a pointer to the inner type in the same function
+
+In this case the inner type is referenced as the store type for a pointer value, and then used later in the function 
+to load from or store through.
+
+It is safe to replace uses of the inner pointer to uses of the outer pointer,
+but only paying attention to the fields from the inner type.
+
+However there is no way to refer to exactly the set of inner fields, so you have to
+decompose the load/store to load/store of each of the inner fields.  That is, if the
+inner type has _N_ fields, then loading or storing to it turns into loading or storing
+to each of the _N_ fields as subfields of the outer struct.
+However, if the inner type has _N_ fields, then loads or stores of the inner fields
+
+Example, before:
+
+```rust
+struct Inner {
+    ia : i32;
+    ib: i32;
+};
+struct Outer {
+    oa:i32;
+    ob: Inner;
+};
+
+fn foo() -> void {
+    var v : Outer;
+    const value : Inner = Inner(1,2);
+    const p : ptr<function,Inner> = v.ob;
+    p = value;
+}
+```
+
+Replace it like this:
+```rust
+struct Inner {
+    ia : i32;
+    ib: i32;
+};
+struct Outer {
+    oa:i32;
+    ob_ia : i32; // inline the fields
+    ob_ib : i32;
+};
+
+fn foo() -> void {
+    var v : Outer;
+    const value : Inner = Inner(1,2);
+    const pmodified : ptr<function,Outer> = v; // keep the reference to the outer type
+    // Store through each of the fields in the outer type, to cover all the fields that
+    // were inlined from the inner type.
+    p.ob_ia = value.ia;
+    p.ob_ib = value.ib;
+}
+```
+
+#### Replacing a function parameter of the inner type
+
+In this case we can replace the function with one that acts on the outer type.
+
+For example, there may be a function such as `fn foo( a : Inner ) -> T`.
+
+However, there may be other calls to the function that still pass in the inner type.
+
+Therefore, like all call-site specialization, this causes us to emit multiple versions
+of a function to accommodate the different variants of the original type.
+
+For example, we end up with both `fn foo( a : Inner ) -> T` and also the specialized
+function `fn foo_Outer( a: Outer ) -> T`.
+
+#### Replacing a function parameter that is a pointer to the inner type
+
+In this case a function has a formal parameter of type pointer-to-the-inner-type.
+This must be rewritten to be a function taking a pointer-to-the-outer-type.
+
+In base WGSL, pointers to uniform or storage storage classes are not permitted as function parameters.
+However, we expect this to be supported by an extension corresponding to the VariablePointers SPIR-V feature.
+So we expect we have to address this.
+
+This can be handled with call site specialiazation, but it causes us to emit
+multiple versions of the function.
+
+
 ## Future features
 
 We may also wish to allow `[[contiguous]]` attributes on structs to switch all fields to use scalar (`[[align(4)]]`) packing.
