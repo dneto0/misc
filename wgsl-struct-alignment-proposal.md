@@ -153,10 +153,10 @@ fn foo() -> vec3<f32> {
 }
 ```
 
-## Futureproofing
+## Future-proofing
 
 This proposal adds natural alignment and sizes for all types, but to support future cases, we may wish to override these defaults.
 
 This may be accomplished with `[[align(N)]]`, `[[size(M)]]` annotations on struct members and/or type declarations (structs, aliases).
 
-We may also wish to add `[[packed]]` annotations on structs to switch all fields to use `[[align(4)]]` packing.
+We may also wish to add `[[contiguous]]` annotations on structs to switch all fields to use scalar (`[[align(4)]]`) packing.
