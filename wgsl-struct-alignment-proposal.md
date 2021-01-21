@@ -44,7 +44,7 @@ The rules for aligning a struct field:
 
 Example:
 
-```c++
+```rust
 /*            align(16) size(8)  */ struct A {       
 /* offset(0)  align(4)  size(4)  */     u: f32;
 /* offset(4)  align(4)  size(4)  */     v: f32;
