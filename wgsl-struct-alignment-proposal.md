@@ -37,6 +37,10 @@ The WGSL specification will declare that all types have a natural alignment and 
 
 > Note: Unlike vectors, matrix size have been rounded to alignment, preventing packing. This was to simplify the size rules. Debatable decision.
 
+A matrix is laid out so that a program can form a reference to each of its column
+vectors, and that reference (pointer) is like a reference to a regular column vector.
+In particular, the column vector must be aligned.
+
 ### Structure Layouts
 
 The rules for aligning a struct field:
