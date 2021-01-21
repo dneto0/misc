@@ -44,24 +44,24 @@ The rules for aligning a struct field:
 
 Example:
 
-```c++
-/*            align(16), size(8)  */ struct A {       
-/* offset(0)  align(4),  size(4)  */     u: f32
-/* offset(4)  align(4),  size(4)  */     v: f32
+```rust
+/*            align(16) size(8)  */ struct A {       
+/* offset(0)  align(4)  size(4)  */     u: f32;
+/* offset(4)  align(4)  size(4)  */     v: f32;
                                     }
 
-/*            align(16), size(88) */ struct B {
-/* offset(0)  align(8),  size(8)  */     a: vec2<f32>
-/* offset(8)  align(1)   size(8)         -- alignment padding -- */ 
-/* offset(16) align(16), size(12) */     b: vec3<f32>
-/* offset(28) align(4),  size(4)  */     c: f32;
-/* offset(32) align(4),  size(4)  */     d: f32;
-/* offset(36) align(1)   size(12)        -- alignment padding -- */ 
-/* offset(48) align(16), size(8)  */     e: A;
-/* offset(56) align(1)   size(8)         -- alignment padding -- */ 
-/* offset(64) align(16), size(8)  */     f: A;
-/* offset(72) align(8),  size(8)  */     g: vec2<f32>
-/* offset(80) align(8),  size(8)  */     h: vec2<f32>
+/*            align(16) size(88) */ struct B {
+/* offset(0)  align(8)  size(8)  */     a: vec2<f32>;
+/* offset(8)  align(1)  size(8)         -- alignment padding -- */ 
+/* offset(16) align(16) size(12) */     b: vec3<f32>;
+/* offset(28) align(4)  size(4)  */     c: f32;
+/* offset(32) align(4)  size(4)  */     d: f32;
+/* offset(36) align(1)  size(12)        -- alignment padding -- */ 
+/* offset(48) align(16) size(8)  */     e: A;
+/* offset(56) align(1)  size(8)         -- alignment padding -- */ 
+/* offset(64) align(16) size(8)  */     f: A;
+/* offset(72) align(8)  size(8)  */     g: vec2<f32>;
+/* offset(80) align(8)  size(8)  */     h: vec2<f32>;
                                     }
 ```
 
@@ -106,13 +106,16 @@ Can be translated to:
 [[binding(0), group(0)]] var<uniform> uniforms : [[access(read)]] Uniforms;
 
 fn foo() -> vec2<f32> {
-    return uniforms.abc.xy + vec2<f32>(uniforms.abc.z, uniforms.abc.z); // or just uniforms.abc.xy + uniforms.abc.zw
+    return uniforms.abc.xy + vec2<f32>(uniforms.abc.z, uniforms.abc.w); // or just uniforms.abc.xy + uniforms.abc.zw
 }
 ```
 
 ### 2. Removing end-of-struct padding
 
-Certain backends (TODO: Links) require structures to be padded to a multiple of 16 bytes. This proposal does not have this requirement.
+Certain backends require structures to be padded to a multiple of 16 bytes. This proposal does not have this requirement.
+
+- [Vulkan](https://www.khronos.org/registry/vulkan/specs/1.2/html/chap16.html#interfaces-resources-layout): "The Offset decoration of a member must not place it between the end of a structure or an array and the next multiple of the alignment of that structure or array."
+- TODO: Others?
 
 To support these backends, structures can be inlined at the WGSL AST level before emission:
 
