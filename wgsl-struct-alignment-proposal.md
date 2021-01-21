@@ -132,6 +132,43 @@ fn foo() -> vec2<f32> {
 }
 ```
 
+#### Interaction with atomics
+
+Atomics are coming. See https://github.com/gpuweb/gpuweb/issues/1360
+
+The widen-to-vec4 technique doesn't work directly if one of the fields being absorbed is atomic:
+```rust
+[[block]] struct Uniforms {
+    a : vec2<u32>;
+    b : atomic<u32>;
+    c : u32;
+};
+```
+
+Suppose we translate it like this:
+```rust
+[[block]] struct Uniforms {
+    a : vec4<u32>;
+};
+```
+
+Consider the Vulkan translation. 
+We should only touch the `b` component via atomic operations.
+We might introduce data races if we do non-atomic loads and stores on the whole vector or on what would be the `b` component. 
+
+The right solution is likely to scalarize the 4 elements of the vector:
+
+```rust
+[[block]] struct Uniforms {
+    a0 : u32;
+    a1 : u32;
+    b : u32; // only atomic operations here.
+    c : u32;
+};
+```
+When we wanted to operate on the vec2 `a` component, keep the pointer to the whole struct, and then scalarize the memory accesses.
+This adds an extra pointer-calculation and an extra memory access.
+
 ### 2. Removing end-of-struct padding
 
 Certain backends require structures to be padded to a multiple of 16 bytes. This proposal does not have this requirement.
