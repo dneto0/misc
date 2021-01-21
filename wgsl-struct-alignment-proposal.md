@@ -21,17 +21,19 @@ The WGSL specification will declare that all types have a natural alignment and 
 | vec3        | 16                | 12                                      |
 | vec4        | 16                | 16                                      |
 | mat2x2      | 8                 | 16                                      |
-| mat2x3      | 8                 | 32                                      |
-| mat2x4      | 8                 | 32                                      |
-| mat3x2      | 16                | 32                                      |
+| mat3x2      | 8                 | 32                                      |
+| mat4x2      | 8                 | 32                                      |
+| mat2x3      | 16                | 32                                      |
 | mat3x3      | 16                | 48                                      |
-| mat3x4      | 16                | 64                                      |
-| mat4x2      | 16                | 32                                      |
-| mat4x3      | 16                | 48                                      |
+| mat4x3      | 16                | 64                                      |
+| mat2x4      | 16                | 32                                      |
+| mat3x4      | 16                | 48                                      |
 | mat4x4      | 16                | 64                                      |
 | struct      | 16                | last element offset + last element size |
 | array<T, N> | element alignment | N * element size rounded to element alignment |
 
+
+> Note: Recall that mat2x3 has 2 column vectors, each of which is vec3.
 
 > Note: Unlike vectors, matrix size have been rounded to alignment, preventing packing. This was to simplify the size rules. Debatable decision.
 
