@@ -21,7 +21,7 @@ The WGSL specification will declare that all types have a natural alignment and 
 | vec3        | 16                | 12                                      |
 | vec4        | 16                | 16                                      |
 | mat2x2      | 8                 | 16                                      |
-| mat3x2      | 8                 | 32                                      |
+| mat3x2      | 8                 | 24                                      |
 | mat4x2      | 8                 | 32                                      |
 | mat2x3      | 16                | 32                                      |
 | mat3x3      | 16                | 48                                      |
