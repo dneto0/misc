@@ -132,6 +132,35 @@ fn foo() -> vec2<f32> {
 }
 ```
 
+#### Beware of NaNs
+
+If floating point types are mixed with integer types, then the remapped type should use an integer component
+rather than a floating point component.
+That's because NaNs don't have unique representations, and some hardware will normalize a NaN value to a specific
+bit pattern.
+On such hardware, certain integer bit patterns, if reinterpreted and processed via a floating point value,
+will lose their bit representation.
+
+For example, this original structure:
+```rust
+[[block]] struct Uniforms {
+    a : vec2<u32>;
+    b : u32;
+    c : f32;
+};
+```
+
+Should be remapped to this structure:
+
+```rust
+[[block]] struct Uniforms {
+    a : vec4<u32>;
+};
+```
+The fields that were previously floating point would be reinterpreted after loading by
+`bitcast<f32>` and before storing via `bitcast<u32>`.
+
+
 ### 2. Removing end-of-struct padding
 
 Certain backends require structures to be padded to a multiple of 16 bytes. This proposal does not have this requirement.
