@@ -35,6 +35,8 @@ The WGSL specification will declare that all types have a natural alignment and 
 
 > Note: Unlike vectors, matrix size have been rounded to alignment, preventing packing. This was to simplify the size rules. Debatable decision.
 
+### Structure Layouts
+
 The rules for aligning a struct field:
 * Structures themselves are always 16 byte aligned.
 * The first field is always at offset 0 of the structure.
@@ -68,7 +70,19 @@ Example:
 Observe that `c`, packs into end of the `vec3` of `b`.
 Note: With the fixed type alignment and sizes of this initial proposal, scalars can be packed into the *end* of a vector, not the front.
 
-Offsets between array elements are always equal to the size of the element rounded up to element alignment. 
+Struct members may be annotated with `[[align(n)]]` and / or `[[size(n)]]` attributes.
+For MVP, these attributes can be used to verify that the type's layout rules are as expected by the developer ("show your working out").
+In the future these attributes could be used to allow custom control of the alignment and size of each member.
+
+> Note: We may wish to also annotate user defined types (`struct`, `type` aliases) with the same attributes. These would affect all uses of the type, but are still overridable with per-member attributes.
+
+### Array Layouts
+
+Arrays take the alignment of their element type.
+
+Element stride (byte offsets between array elements) is equal to the size of the element rounded to a multiple of the element alignment.
+
+The total size of an array is equal to the number of elements multipled by the element stride.
 
 ## WGSL translations
 
@@ -155,10 +169,6 @@ fn foo() -> vec3<f32> {
 }
 ```
 
-## Future-proofing
+## Future features
 
-This proposal adds natural alignment and sizes for all types, but to support future cases, we may wish to override these defaults.
-
-This may be accomplished with `[[align(N)]]`, `[[size(M)]]` annotations on struct members and/or type declarations (structs, aliases).
-
-We may also wish to add `[[contiguous]]` annotations on structs to switch all fields to use scalar (`[[align(4)]]`) packing.
+We may also wish to allow `[[contiguous]]` attributes on structs to switch all fields to use scalar (`[[align(4)]]`) packing.
