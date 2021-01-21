@@ -78,7 +78,9 @@ If the backend does not support this layout ruleset natively, there are some sim
 
 ### 1. Packing to `vec4`
 
-Given that all vectors have an alignment of 16 bytes, all field members can be transformed into `vec4`s, and swizzling can be performed where scalars are packed.
+Given the natural layout rules described above, all field members can be transformed into a sequence of contiguous `vec4`s, without requiring any unaligned vector loads or stores.
+
+Fields that have been packed are accessed by using swizzles.
 
 For example:
 
