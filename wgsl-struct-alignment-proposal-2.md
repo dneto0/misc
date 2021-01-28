@@ -74,18 +74,18 @@ Example:
 /* offset(20)  align(1)  size(4)          -- struct size padding -- */ 
                                      }
 
-/*             align(16) size(128) */ struct B {
+/*             align(16) size(112) */ struct B {
 /* offset(0)   align(8)  size(8)   */     a: vec2<f32>;
 /* offset(8)   align(1)  size(8)          -- field alignment padding -- */ 
 /* offset(16)  align(16) size(12)  */     b: vec3<f32>;
 /* offset(28)  align(4)  size(4)   */     c: f32;
 /* offset(32)  align(4)  size(4)   */     d: f32;
 /* offset(36)  align(1)  size(12)         -- field alignment padding -- */ 
-/* offset(48)  align(8)  size(24)  */     e: A;
-/* offset(72)  align(1)  size(8)          -- field alignment padding -- */ 
-/* offset(80)  align(16) size(12)  */     f: vec3<f32>;
-/* offset(92)  align(8)  size(24)  */     g: A;
-/* offset(116) align(1)  size(12)         -- struct size padding -- */ 
+/* offset(40)  align(8)  size(24)  */     e: A;
+/* offset(64)  align(16) size(12)  */     f: vec3<f32>;
+/* offset(76)  align(1)  size(4)          -- field alignment padding -- */ 
+/* offset(80)  align(8)  size(24)  */     g: A;
+/* offset(104) align(1)  size(112)        -- struct size padding -- */ 
                                      }
 ```
 
