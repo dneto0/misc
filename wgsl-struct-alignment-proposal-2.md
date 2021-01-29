@@ -91,6 +91,23 @@ The rules for aligning a struct field:
 * Structures nested in other structures behave the same as any other field type.
 * Individual structure fields may be annotated with `[[align(n)]]` and / or `[[size(n)]]` decorations to override their default layout. Field decorations will override any decorations defined on the type.
 
+### Impact on the type system
+
+The size, align, and stride attributes are collectively known as the "layout attributes" and form an integral part of the type they modify.
+
+Therefore:
+* WGSL must specify that unless otherwise stated, any rule that applies to type _T_ also applies to the type that is _T_ with extra attributes.
+* Modify the rules in [MR 1368](https://github.com/gpuweb/gpuweb/pull/1368):
+    * Modify the assignment type rule to indicate that the right-hand-side of the assignment does not have to match layout attributes with the store type of the left-hand side.
+        * Since this maps to SPIR-V OpStore, and OpStore requires matching types, then this means structures and arrays may have to be broken
+            down into components before storing.
+            * If SPIR-V 1.4 is available, use OpCopyLogical from the non-layout type to the layout type.
+            * Prior to SPIR-V 1.4, there might be a loophole allowing a loaded value to have type with layout that loses meaning. (This needs research.)
+    * Modify the pointer-loading-expression rule to indicate that the result type is the store type of the pointer, but without layout.
+
+We may want to create a mechanism to strip layout from a type:  `remove_layout<T>` is the type `T` but without layout attributes. 
+
+
 ### Default Structure Layout Example
 
 ```rust
