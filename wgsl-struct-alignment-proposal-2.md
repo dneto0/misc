@@ -2,7 +2,7 @@
 
 ## Design principles
 
-1. Provides a single **default layout** for any datatype (primitive, structure, array).
+1. Provides a single **default layout** for any host-shareable datatype (primitive, structure, array).
 
     The layout is always valid for storage buffers. \
     The rules are practical - not too wasteful. \
@@ -97,6 +97,7 @@ The size, align, and stride attributes are collectively known as the "layout att
 
 Therefore:
 * WGSL must specify that unless otherwise stated, any rule that applies to type _T_ also applies to the type that is _T_ with extra attributes.
+    * For example, if type _T_ is the type `i32` type by `[[align(16)]]`, then _T_ is a different type from `i32`. However, the rules for `i32` in [Internal layout of values](https://gpuweb.github.io/gpuweb/wgsl.html#internal-value-layout) also apply to `T`.
 * Modify the rules in [MR 1368](https://github.com/gpuweb/gpuweb/pull/1368):
     * Modify the assignment type rule to indicate that the right-hand-side of the assignment does not have to match layout attributes with the store type of the left-hand side.
         * Since this maps to SPIR-V OpStore, and OpStore requires matching types, then this means structures and arrays may have to be broken
